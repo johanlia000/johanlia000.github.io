@@ -11,23 +11,216 @@
     </head>
 
     <body>
+      <div class='assignment-top'>
+        <center><h1>Assignment 1: Blink!</h1></center>
 
-      <div class="header">
-          <center><h1>Assignment 1: Blink!</h1></center>
+        <div class='assignment-row'>
+          <div class='column-header'>
+            <br>
+            <h3><b>Overview</b></h3>
+            <p>
+              For this assignment I created a schematic for three LEDs that are connected to my arduino.
+              Then I implemented the circuit on a breadboard to create three independent blinking lights.
+            </p>
 
-          <center><img src="red-panda.jpg" width=400></a></center>
-          <br></br>
+            <p>Note: Kay Waller helped me with a few HTML/CSS hurdles and we discussed the
+              different resistances based on voltage drops.</p>
 
-          <div class='row'>
-            <div class='column-header'>
-              <p>For this assignment I created a schematic and circuit for three LEDs</p>
-              <p>For this assignment I created a schematic and circuit for three LEDs</p>
-              <p>For this assignment I created a schematic and circuit for three LEDs</p>
-              <p>Test</p>
-            </div>
+            <br>
+            <h3><b>Schematic</b></h3>
+            <br>
+            <center><img src="Photos/A1/schematic.jpg" width=500></a></center>
+            <br>
+            <p>
+              To understand how I was going to get my LEDs to independently light up I sketched a schematic.
+              Because I wanted them to blink independently, I started each LED from a different pin (13, 12, 11) that's on the Arduino board.
+              First, I knew that I wanted to run my LEDs at around 20 mA current. Using Ohm's Law (V = I * R) I calculated the resistances that I needed
+              for my circuit.
+            </p>
+
+            <p>
+              I found two different resistances. One needed for both the Green/Red LEDs and one for the White LED, because the
+              White LED has a different voltage drop than the Green and Red LEDs.
+            </p>
+
+            <p>
+              I started with Ohm's law: <b>V = I * R</b>
+            </p>
+
+            <p> To find resistance (R) based on our two givens, voltage (V) and current (I),
+              I rearranged the equation to be: <br>
+              <b>R = V/ I</b>
+            </p>
+
+            <p>
+              <u>For the Red and Green LEDs:</u> <br>
+              The voltage source, my computer, was <b>5 V</b> <br>
+              The voltage drop for Red and Green is <b>1.8 V</b> <br>
+              I want the current to be 20 mA, which is <b>0.02 A</b> <br>
+              And I want to find the needed resistance, <b>R Ω</b>
+            </p>
+
+            <p>
+              Plugging in those values to the equation I get:<br>
+              <b>5V - 1.8V = 0.02A * RΩ</b>
+            </p>
+
+            <p>
+              Then I solved for R (Ω)<br>
+              <b>3.2V / 0.02A = RΩ</b> <br>
+              <b>160Ω = R</b> <br>
+            </p>
+
+            <p>
+              For the Red/Green LEDs, I found that to have a current of <b>20mA</b> and a voltage of <b>3.2V</b> I needed <b>160Ω</b> for resistance.
+              The closest resistor in my kit was the <b>220Ω</b> resistor; this is what I used for my circuit. <br>
+              With the <b>220Ω</b> and voltage of <b>3.2V</b> <br>
+              <b>I = V / R</b> <br>
+              <b>I = 3.2V / 220Ω</b> <br>
+              <b>I = 0.0145A</b> <br>
+              It's okay that the current is slightly lower than the 0.02A preffered. <br>
+            </p>
+
+            <p>
+              <u>For the White LED:</u> <br>
+              The voltage source, my computer, was <b>5 V</b> <br>
+              The voltage drop for White is <b>3.3 V</b> <br>
+              I want the current to be 20 mA, which is <b>0.02 A</b> <br>
+              And I want to find the needed resistance, <b>RΩ</b>
+            </p>
+
+            <p>
+              Plugging in those values to the equation I get:<br>
+              <b>5V - 3.3V = 0.02A * RΩ</b>
+            </p>
+
+            <p>
+              Then I solved for R (Ω)<br>
+              <b>1.7V / 0.02A = RΩ</b> <br>
+              <b>85Ω = R</b> <br>
+            </p>
+
+            <p>
+              For the White LED, I found that to have a current of <b>20mA</b> and a voltage of <b>1.7V</b> I needed <b>85Ω</b> for resistance.
+              The closest resistor in my kit was the <b>100Ω</b> resistor; this is what I used for my circuit.<br>
+              With the <b>100Ω</b> and voltage of <b>1.7V</b> <br>
+              <b>I = V / R</b> <br>
+              <b>I = 1.7V / 100Ω</b> <br>
+              <b>I = 0.017A</b> <br>
+              It's okay that the current is slightly lower than the 0.02A preffered. <br>
+            </p>
+
+            <br>
+            <h3><b>Breadboard Circuit</b></h3>
+            <br>
+
+            <center><img src="Photos/A1/breadboard1.jpg" width=600></a></center>
+            <center><i><p>Side view of my circuit on the breadboard</i></p></center>
+            <br>
+            <center><img src="Photos/A1/breadboard2.jpg" width=600></a></center>
+            <center><i><p>Top view of my circuit on the breadboard</i></p></center>
+            <br>
+
+            <p>Fun Choice: I chose to use a red, a white, and a green LED to mimic the colors in the Italian flag.</p>
+
+
+            <br>
+            <h3><b>LED Lights Blinking</b></h3>
+            <br>
+            <center><video width="500" controls>
+              <source src="Photos/A1/vid1.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of blinking LED lights</i></p></center>
+
+            <br>
+
+            <center><video width="350" controls>
+              <source src="Photos/A1/vid2.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+
+            <center><p><i>Boomerang of blinking LED lights</i></p></center>
+
+
+            <br>
+            <h3><b>Arduino Code </b></h3>
+            <p>
+              To get the lights to blink independently I coded the Arduino. I found inspiration from the example code snippet, "Blink." <br></br>
+
+              For the setup() I initated the three different pins on the Arduino (13, 12, 11). <br></br>
+
+              The loop() is where the LED lights actually light up and blink. Because I set each LED light to a different pin on the Arduino board,
+              I had control over each light. I decided to make the green light blink twice in a row quickly, and then have the white light blink once,
+              and then have the red light blink once; then repeat until "forever.
+            <p>
+
+            <pre><code>
+              // Lia Johansen
+              // Assignment 1: Blink
+              // January 9, 2020
+
+              // the setup function runs once when you press reset or power the board
+              void setup() {
+                // initialize digital pin 13 (this is the green LED)
+                pinMode(13, OUTPUT);
+                // initialize digital pin 12 (this is the white LED)
+                pinMode(12, OUTPUT);
+                // initialize digital pin 11 (this is the red LED)
+                pinMode(11, OUTPUT);
+              }
+
+
+              // the loop function runs over and over again forever blinking the LED lights
+              void loop() {
+                // turn the green LED on by making the voltage HIGH
+                digitalWrite(13, HIGH);
+                // wait for half of a second while green LED is on
+                delay(500);
+                // turn the green LED off by making the voltage LOW
+                digitalWrite(13, LOW);
+                // wait for 1/20 a second
+                delay(50);
+
+                // turn the green LED on again by making the voltage HIGH
+                digitalWrite(13, HIGH);
+                // wait for half of a second while green LED is on
+                delay(300);
+                // turn the green LED off by making the voltage LOW
+                digitalWrite(13, LOW);
+                // wait for 1/10 a second
+                delay(100);
+
+
+                // turn the white LED on by making the voltage HIGH
+                digitalWrite(12, HIGH);
+                // wait for half a second while white LED is on
+                delay(500);
+                // turn the white LED off by making the voltage LOW
+                digitalWrite(12, LOW);
+                // wait for 1/10 of a second
+                delay(100);
+
+
+                // turn the red LED on by making the voltage HIGH
+                digitalWrite(11, HIGH);
+                // wait for half a second while red LED is on
+                delay(500);
+                // turn the red LED off by making the voltage LOW
+                digitalWrite(11, LOW);
+                // wait for 1/10 of a second
+                delay(100);
+              }
+            </code></pre>
+
+
+          </div>
+
+
           </div>
       </div>
-
+      <div class='footer'></div>
 
     </body>
+
 </html>
