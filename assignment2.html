@@ -1,25 +1,255 @@
-<!DOCTYPE html> 
-<html> 
-    <head> 
-        <meta charset="utf-8"> 
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Assignment 2: Fade!</title>
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
-    </head> 
-    <body> 
+    </head>
 
-        <div class="header">
-            <h1>Example Student's Assignment 2!</h1>
+    <body>
+      <div class='assignment-top'>
+        <center><h1>Assignment 2: Fade!</h1></center>
+
+        <div class='assignment-row'>
+          <div class='column-header'>
+            <br>
+            <h3><b>Overview</b></h3>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+              For this assignment I created a schematic to visualize the circuit for a button and two LEDs that are
+              connected to my arduino. Then I implemented the circuit on a breadboard. <br></br>
+              When the button is pressed the green LED will fade to dimmer
+              and then will dim to brighter; then both lights will blink simultaneously 7 times. When the button is not pressed,
+              the green LED will be on while the yellow LED blinks.
             </p>
+
             <p>
-            Here is all the documentation for assignment 2!
+              Note: Kay Waller helped me with checking my wiring on my arduino board.
             </p>
-        </div>
-        
+
+            <br>
+            <h3><b>Schematic</b></h3>
+            <br>
+            <center><img src="Photos/A2/schematic.jpg" width=500></a></center>
+            <br>
+            <p>
+              To understand how to set up my circuit on my arduino board I sketched out a schematic and did the calculations
+              for the needed resistors for the button and LEDs. I wanted my two LEDs to turn on/off independently and have the button
+              control their behavior. Because I was going to use analogWrite() to give specific brightness values to my LEDs,
+              I hooked up my green LED to pin ~6 and my yellow LED
+              to pin ~5 on the arduino board. Then I connected my button to the 5V, and had pin 2 connect after the button to allow
+              me to read the button's value (digitalRead()) of high/low.
+            </p>
+
+            <p>
+              First, I wanted to find the resistor needed for the button circuit. I used Ohm's law to calculate the resistance.
+            </p>
+
+            <p>
+              Ohm's Law: <b>V = I * R</b> <br>
+              The voltage source, my computer,<b> was 5V </b> <br>
+              The arduino supplies a max current of <b>40 mA</b> <br>
+              And I want to find the needed resistance, <b>RΩ</b>
+            </p>
+
+            <p>
+              Plug those values into the equation: <br>
+              <b>5V = 0.04A * RΩ</b> <br>
+              <b>5V / 0.04A = RΩ</b> </br>
+              <b> R = 125Ω</b>
+            </p>
+
+            <p>
+              I don't have a 125Ω resistor in my kit; I have a 100Ω and a 220Ω. The <b>100Ω</b> resistor is too small
+              and will create too large of a current. <br>
+              <b>V = I * R</b> <br>
+              <b>V / R = I</b> <br>
+              <b>5V / 100Ω = I</b> <br>
+              <b>I = 50mA</b> <br></br>
+
+              So, I used the 220Ω, which creates a 22.7mA current <br>
+              <b>I = V / R </b> <br>
+              <b>I = 5V / 220Ω </b> <br>
+              <b>I = 22.7mA </b> <br>
+            </p>
+
+            <p>
+              Then, I calculated the needed resistance for the LED circuits. I was using a yellow LED and green LED;
+              they both have a voltage drop of 1.8V, so I can use the same size resistor.
+            </p>
+
+            <p>
+              Ohm's Law: <b>V = I * R</b> <br>
+              The voltage source, my computer, was <b>5V</b> <br>
+              The voltage drop was <b>1.8V</b> <br>
+              The desired current was <b>20mA</b> <br>
+              and I want to find the resistance <b>RΩ</b> <br>
+            </p>
+
+            <p>
+              Plug those values into the equation: <br>
+              <b>5V - 1.3V = 0.02A * RΩ</b> <br>
+              <b>3.2V / 0.02A = RΩ</b> </br>
+              <b> R = 160Ω</b>
+            </p>
+
+            <p>
+              For the yellow and green LEDs I found that to have <b>20mA</b> of current and a voltage of <b>3.2V</b>
+              I need a <b>160Ω</b> resistor. The closest resistor in my kit is the 220Ω resistor; this is what I used in my
+              circuits.<br>
+
+              With the <b>220Ω</b> and voltage of <b>3.2V</b> <br>
+              <b>I = V / R</b> <br>
+              <b>I = 3.2V / 220Ω</b> <br>
+              <b>I = 0.0145A</b> <br>
+              It's okay that the current is slightly lower than the 0.02A preffered. The current just
+              can't be above 30mA according to the documentation.
+            </p>
+
+
+
+            <br>
+            <h3><b>Breadboard Circuit</b></h3>
+            <br>
+
+            <center><img src="Photos/A2/breadboard1.jpg" width=600></a></center>
+            <center><i><p>Top view of my circuit on the breadboard</i></p></center>
+            <br>
+            <center><img src="Photos/A2/breadboard2.jpg" width=600></a></center>
+            <center><i><p>Side view of my circuit on the breadboard</i></p></center>
+            <br>
+
+
+            <br>
+            <h3><b>Button Controlling LEDs</b></h3>
+            <br>
+            <center><video width="500" controls>
+              <source src="Photos/A2/vid.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of button fading and blinking LED lights</i></p></center>
+
+            <br>
+
+            <br>
+            <h3><b>Arduino Code </b></h3>
+            <p>
+              To get the button to change the state of the LED lights I coded the Arduino.
+              I found inspiration from the example code snippet, "Button." <br></br>
+
+              First I set up my constants, which were the pin numbers for the LEDs and button. <br></br>
+
+              For the setup() I initialized the two LED lights (green and yellow) to their respective pins (which I had just put as constants)
+              on the Arduino (~6, ~5); I also initialized the pin for the button as input as I want to read if it's on or off. <br></br>
+
+              The loop() is where the fun happens! It constanly loops and reads and checks if the button is pressed.
+              If the button is not pressed, then the green light is on full brightness and the yellow light blinks on and off.
+              It reminds me of a play on caution traffic lights. The yellow is blinking communicating being careful.
+
+              If the button is pressed the yellow light shuts off, and the green light fades from bright to dim and then
+              fades from dim to bright. Then the green and yellow light blink together 7 times.
+            <p>
+
+            <pre><code>
+              // Lia Johansen
+              // January 16, 2020
+              // Assignment 2: Fade!
+
+              // constants won't change:
+              // They're used here to set pin numbers:
+              const int buttonPin = 2;     // the number of the pushbutton pin
+              const int ledGreen =  6;      // the number of the LED Green pin
+              const int ledYellow =  5;      // the number of the LED Yellow pin
+
+              // variables will change:
+              int buttonState = 0;         // variable for reading the button status
+
+
+              void setup() {
+                // initialize the Green LED pin as an output:
+                pinMode(ledGreen, OUTPUT);
+                // initialize the Yellow LED pin as an output:
+                pinMode(ledYellow, OUTPUT);
+                // initialize the pushbutton pin as an input:
+                pinMode(buttonPin, INPUT);
+              }
+
+              void loop() {
+                // read the state of the pushbutton value:
+                buttonState = digitalRead(buttonPin);
+
+
+                // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+                if (buttonState == HIGH) {
+                  // Turn off yellow LED
+                  digitalWrite(ledYellow, LOW);
+
+                  // make the green led fade from bright to dim
+                  for(int i = 255; i >= 0 ;i--){
+                    // make green light a certain value
+                    // (i) that controls brightness
+                    analogWrite(ledGreen, i);
+                    // wait 0.01 seconds
+                    delay(10);
+                  }
+
+                  // turn green led off
+                  analogWrite(ledGreen, 0);
+                  // wait half a second while green led is off
+                  delay(500);
+
+                  // make the green button fade from dim to bright
+                  for(int i = 0; i <= 255 ;i++){
+                    // make green light a certain value (i)
+                    analogWrite(ledGreen, i);
+                    // wait 0.01 seconds
+                    delay(10);
+                  }
+
+                  // make the green and yellow light blink 7 times together
+                  for (int i = 1; i < 7; i++){
+                    // turn on the green led to almost full brightness
+                    analogWrite(ledGreen, 200);
+                    // turn on the yellow led to almost full brightness
+                    analogWrite(ledYellow, 200);
+                    // wait .2 seconds
+                    delay(200);
+                    // turn the green led to very dim
+                    analogWrite(ledGreen, 10);
+                    // turn the yellow led to very dim
+                    analogWrite(ledYellow, 10);
+                    // wait .2 seconds
+                    delay(200);
+                  }
+
+
+                } else { // This means the button is not pressed (LOW)
+                  // turn on the green led to full brightness
+                  analogWrite(ledGreen, 255);
+
+                  // Makes yellow light blink
+                  // turn on the yellow led
+                  digitalWrite(ledYellow, HIGH);
+                  // wait .5 a second
+                  delay(500);
+                  // turn off the yellow led
+                  digitalWrite(ledYellow, LOW);
+                  // wait .5 second
+                  delay(500);
+                }
+              }
+            </code></pre>
+
+          </div>
+
+
+          </div>
+      </div>
+      <div class='footer'></div>
+
     </body>
+
 </html>
