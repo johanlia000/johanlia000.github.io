@@ -67,7 +67,8 @@
               give me the largest range of V_out values (because AnalogRead gives reads 0 (0V) to 1023 (5V)) and I want that full range of voltage.
               Second, I need R2 to not allow too much current flow from power to ground. I used the V_out equation to calculate the V_out range
               for resistances of 100Ω, 220Ω, 2kΩ, 10kΩ, and 100kΩ, and then chose the resistor that gave me the largest V_out range.
-              I found that <b>2k resistor would be best for R2</b> because it gives the largest range of V_out values and not allow too much current.
+              I found that <b>2k resistor would be best for R2</b> because it gives the largest range of V_out values and not allow too
+              much current (the current would be 2.35mA which is way under the max current of 40mA that the Arduino can supply).
             </p>
             <br></br>
 
@@ -113,17 +114,19 @@
               initialized the photoresistor as an input to its respective pin A0.
               I also initialized the three LEDs (red, green, blue) as outputs and mapped them to pin numbers ~9, ~10, ~11. <br></br>
 
-              The loop() is where the action happens! It constanly loops and reads and checks what
+              The loop() is where the action happens! It constantly loops and reads and checks what
               value the photoresistor reads (on a scale of very bright to very dark); The analogRead reads 1023 for 5V
               and 0 for 0V. Note that dark is lower voltage and brighter is higher voltage. Then once I attain that 0-1023
               value, I remap it to a different range; I chose 0 - 255 in case I wanted to directly feed the changedValue to
-              the analogWrite() for the LEDs; I chose to go a different course though. Based on my brightness tests (that I
-              used the serial.print() to test) a flashlight yields a value around 980 and covering the photoresistor with my finger
-              yields a value around 240. Then I remapped those low and high values to the scale of 0-255 with the map() function. <br></br>
+              the analogWrite() for the LEDs; I chose to go a different course though because I wanted to make distinct different colors.
+              Based on my brightness tests (that I used the serial.print() to see my values) a flashlight yields a value around 980 and
+              covering the photoresistor with my finger yields a value around 240. Then I remapped those low and high values
+              to the scale of 0 - 255 with the map() function. <br></br>
 
-              I have an if/else if/else statement that splits the sensor values into three categories: bright, semi-bright, dark.
-              I chose values based on my light tests with my finger, regular room light, and flashlight.
-              My initial goal was to make a sunset. Bright lights would cause the LED to be bright blue like the sky. Then medium dark
+              Then, I have an if/else if/else statement that splits the sensor values into three categories: bright, semi-bright, dark.
+              I chose the if statement values based on my light tests with my finger, regular room light, and flashlight and using the
+              serial monitor to read the changedValue values. My initial goal was to make a sunset. Bright lights would cause the
+              LED to be bright blue like the sky. Then medium dark
               the LED would be a pink, and really dark would be orange/yellow. I did get this to work, but the colors didn't look different
               when I videotaped it. So, I had to change the colors to more distinct colors. When it's bright, the LED is blue. When it's
               semi-bright, the LED is red. And when it's dark the LED is green.
