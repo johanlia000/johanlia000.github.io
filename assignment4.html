@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Assignment 4: </title>
+        <title>Assignment 4: High(er) Voltage and Transistors</title>
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -12,68 +12,77 @@
 
     <body>
       <div class='assignment-top'>
-        <center><h1>Assignment 4: </h1></center>
+        <center><h1>Assignment 4: High(er) Voltage and Transistors</h1></center>
 
         <div class='assignment-row'>
           <div class='column-header'>
             <br>
             <h3><b>Overview</b></h3>
             <p>
-              For this assignment I created a schematic to visualize the circuit for a photoresistor (sensor that senses light)
-              and an RGB LED that are connected to my arduino. Then I implemented the circuit on a breadboard. <br></br>
-
-              When there is a lot of light in the room, such as a flashlight, the LED turns a light blue. When it's medium brightness, such as
-              normal overhead lights in a room, the LED will be a bright red. When there is no light, the LED turns green.
+              For this assignment I created a schematic and circuit that uses an  N-MOSFET transistor to control
+              load power separate from logic power. I also used a Infrared Sensor to detect
+              communication from the remote that controlls an LED strip. This project also uses an external power
+              supply (the wall outlet), which gives higher voltage to light up the LED strip.
             </p>
 
             <p>
-              Note: Kay Waller helped me talk through and understand what is happening with a voltage drop and the importance of Vout.
-              Also, Nadya and Jasper (through Slack) helped a ton in understanding the importance of choosing a correct R2.
+              Note: I talked with Kay and Lily to better understand the calculations for the current
+              going through the transistor.
             </p>
 
             <br>
             <h3><b>Schematic</b></h3>
             <br>
-            <center><img src="Photos/A3/schematic.jpg" width=500></a></center>
+            <center><img src="Photos/A4/schematic.jpg" width=500></a></center>
             <br>
             <p>
-              To understand how to set up my circuit on my arduino board I sketched out a schematic and did the calculations
-              for the resistor needed for the voltage divider and the resistors needed for the RBG LED. I wanted my RGB
-              LED to turn different colors based on the amount of light in the room that the photoresistor would detect.
+              Transistors are new to me so I sketched out a schematic of my circuit and calculated the
+              current that would go through my transistor. Because I was using a new, larger power source (12V from the wall)
+              I wanted to make sure that I didn't break anything. <br></br>
 
-              <br></br>
+              I have a larger power source of 12V that is connected to the LED strip (which is our load). Then
+              I have my N-MOSFET transistor. The D pin of the transistor is connected to the LED strip, the S
+              pin is connected to ground, and the G pin is connected to pin ~10. It is connected to pin 10 because it
+              has the ~ so I can use analogWrite() to communicate with the transistor through my code. The other part
+              of my schematic is for the Infrared sensor. The sensor gets voltage from the 5V pin, which is connected to R.
+              It then travels to ground, connected to G. Between 5V and ground, pin ~9 is connected to Y and reads input. <br></br>
 
-              The RGB LED consists of a red, green, and blue LED that each have their own resistor (see calculations below).
-              Because I was going to use analogWrite() to give specific brightness values to each red/green/blue LED I hooked up
-              my red LED to pin ~9, green LED to ~10, and blue LED to ~11. The ~ allows me to use analogWrite.
-              Then I want to use analogRead on the voltage divide (R1 = photoresistor and R2 = 2k resistor) so I hooked
-              A0 to read the V_out from the voltage divider.
+              Next, I needed to make sure that the current flowing through the transistor is not more than 32A (that is the
+              maximum amount of current our transistors can handle). So, I needed to calculate the amount of current
+              flowing through my transistor based on my LED strip. <br></br>
+
+              The box the LED Strip came in says we have <b>300 LEDS</b>. Each LED section contains <b>3 white LEDs and
+              one resistor</b>. <br></br>
+
+              Since there are 300 LEDs total there are <b>100 sections</b> (300LEDs/3LEDs per section).<br></br>
+
+              Looking at just one section; I found the current: <br>
+              Each white LED has a <b>3.6 voltage drop</b>. <br>
+              There are 3 white LEDs so <b>3V * 3.6V = 10.8 voltage drop</b><br>
+              The resistor is a <b>181Ω</b><br>
+              And the starting voltage is <b>12V</b><br>
+              Using <b>V = IR</b><br>
+              <b>12v - 10.8v = I * 181Ω</b><br>
+              <b>1.2V / 181Ω = I</b><br>
+              <b>1.2V / 181Ω = 0.0066A</b><br></br>
+
+              Since all of the LED sections are in parallel, to get the total current of the whole LED strip, I just
+              add up all of the currents.<br>
+              There are 100 sections so <b>0.0066A * 100sections = 0.66A total</b><br></br>
+
+              The LED strip draws 0.66A. This is way less than 32A the transistor can support.<br></br>
+
+              I wanted to double check my answer using a different method. <br>
+              I first calcualted the total resistance of the LED strip. All of the LED sections are in parallel.
+              So, the total resistance is <b>1/R = 1/181Ω * 100 sections</b>. This equals a total resistance of <b>1.81Ω.</b><br>
+
+              Then I did <b>V(total) = I(total) + R(total)</b>, which is <b>12V - 10.8V = I(total) * 1.81Ω</b><br>
+              so <b>1.2V / 1.81Ω = I(total)</b><br>
+              <b>I(total) = 0.66A</b><br></br>
+              This aligns with the calculation I got above, so I knew that the transistor would be able to handle
+              the amount of current the LED strip draws.
             </p>
-            <br></br>
 
-            <center><img src="Photos/A3/R2_one.jpg" width=600></a></center>
-            <center><img src="Photos/A3/R2_two.jpg" width=600></a></center>
-            <center><i><p>Calculations for finding the most fitting R2 resistor</i></p></center>
-            <center><img src="Photos/A3/math_vout.jpg" width=600></a></center>
-            <center><i><p>I used MatLab to do the V_out calculations quickly and see variance of V_out ranges</i></p></center>
-
-            <br>
-            <p>
-              In summary, I needed to find the best resistor value for R2 that goes with my photoresistor (R2).
-              First, I tested the lowest and highest resistance of the photoresistor with my multimeter.
-              When I shined a bright flashlight on the photoresistor I measured 130Ω. Then when I turned off all the lights
-              and put a black paper infront of the photoresistor I measured 115kΩ. So, my min photoresistor resistance value is <b>130Ω</b>
-              and my max photoresistor resistance value is <b>115kΩ.</b> Then I knew that I wanted two things. First, I wanted an R2 that would
-              give me the largest range of V_out values (because AnalogRead gives reads 0 (0V) to 1023 (5V)) and I want that full range of voltage.
-              Second, I need R2 to not allow too much current flow from power to ground. I used the V_out equation to calculate the V_out range
-              for resistances of 100Ω, 220Ω, 2kΩ, 10kΩ, and 100kΩ, and then chose the resistor that gave me the largest V_out range.
-              I found that <b>2k resistor would be best for R2</b> because it gives the largest range of V_out values and not allow too
-              much current (the current would be 2.35mA which is way under the max current of 40mA that the Arduino can supply).
-            </p>
-            <br></br>
-
-            <center><img src="Photos/A3/LED_calc.jpg" width=600></a></center>
-            <center><i><p>Calculations for finding the resistors for the RGB LED</i></p></center>
 
 
 
@@ -81,147 +90,174 @@
             <h3><b>Breadboard Circuit</b></h3>
             <br>
 
-            <center><img src="Photos/A3/top.jpg" width=600></a></center>
+            <center><img src="Photos/A4/topView.jpg" width=600></a></center>
             <center><i><p>Top view of my circuit on the breadboard</i></p></center>
             <br>
-            <center><img src="Photos/A3/side.jpg" width=600></a></center>
-            <center><i><p>Side view of my circuit on the breadboard</i></p></center>
+            <center><img src="Photos/A4/top2.jpg" width=400></a></center>
+            <center><i><p>Another top view of my circuit on the breadboard</i></p></center>
             <br>
+            <center><img src="Photos/A4/glowtop.jpg" width=600></a></center>
+            <center><i><p>Top View of my circuit with LED strip on</i></p></center>
+            <br>
+            <center><img src="Photos/A4/closeup.jpg" width=600></a></center>
+            <center><i><p>Close up view of the circuit on the breadboard</i></p></center>
 
 
+
             <br>
-            <h3><b>Photoresistor (Light Sensor) Controlling LED Color</b></h3>
+            <h3><b>IR Remote Control LED Strip</b></h3>
             <br>
-            <center><video width="500" controls>
-              <source src="Photos/A3/A3_video.mp4" type="video/mp4">
+            <center><video width="750" controls>
+              <source src="Photos/A4/A4_remote.mp4" type="video/mp4">
               Your browser does not support the video tag.
             </video></center>
-            <center><p><i>Video of changing LED color when in different amounts of light</i></p></center>
+            <center><p><i>Video of the infrared remote controlling the LED strip</i></p></center>
+            <br>
+            <p>
+              The LED strip starts turned off. Then pressing the 1 button on the remote the LED strip
+              turns on. By pressing the 3 button it turns off. The 2 button makes the LED strip flash
+              5 times. The + button causes the LED strip to fade from off to on, and the - button
+              causes the LED strip to fade from on to off.
+            </p>
 
             <br>
+
 
             <br>
             <h3><b>Arduino Code </b></h3>
             <p>
-              To get the amount of light to change the color of the RGB LED I coded the Arduino.
-              I found inspiration from the example code snippet, "AnalogInOutSerial" and from class slides. <br></br>
+              To get the IR remote to controll the behavior of the LED Strip I coded the Arduino.
+              I found inspiration from the example code snippet from this <a href='http://www.circuitbasics.com/arduino-ir-remote-receiver-tutorial/
+              '>circuit basics page.</a><br></br>
 
-              First I set up my constants, which were the pin numbers for the LEDs and photoresistor.
-              And the initial values for the photoresistor's sensor value (which is between 0-1023)
-              and the sensor value after it's been remapped.<br></br>
+              First I imported the library IRemote for the IR sensor and remote. I then set up my two contanst for
+              the IR sensor and transistor pin. The Transistor's pin is ~10 because I need to be able to
+              use AnalogWrite() and the ~ allows me to do this. Then I create an object of type IRrecv and
+              a decode_results variable to store the data from the sensor. <br></br>
 
-              For the setup() I initialized the serial number so that I could monitor the sensor values. Then I
-              initialized the photoresistor as an input to its respective pin A0.
-              I also initialized the three LEDs (red, green, blue) as outputs and mapped them to pin numbers ~9, ~10, ~11. <br></br>
+              The setup() initializes serial communications so I can see the sensor's values in order to debug and
+              better understand what my code is doing. Then I set up my IR sensor and tell the arduino to blink
+              when a signal from the remote is received; this helped me when I was debugging my code. Finally, I set up my
+              transistor pin as an output so I could give it directions to open or close the voltage. By stating that it's
+              an output, the state of the pin is initially LOW.  <br></br>
 
-              The loop() is where the action happens! It constantly loops and reads and checks what
-              value the photoresistor reads (on a scale of very bright to very dark); The analogRead reads 1023 for 5V
-              and 0 for 0V. Note that dark is lower voltage and brighter is higher voltage. Then once I attain that 0-1023
-              value, I remap it to a different range; I chose 0 - 255 in case I wanted to directly feed the changedValue to
-              the analogWrite() for the LEDs; I chose to go a different course though because I wanted to make distinct different colors.
-              Based on my brightness tests (that I used the serial.print() to see my values) a flashlight yields a value around 980 and
-              covering the photoresistor with my finger yields a value around 240. Then I remapped those low and high values
-              to the scale of 0 - 255 with the map() function. <br></br>
-
-              Then, I have an if/else if/else statement that splits the sensor values into three categories: bright, semi-bright, dark.
-              I chose the if statement values based on my light tests with my finger, regular room light, and flashlight and using the
-              serial monitor to read the changedValue values. My initial goal was to make a sunset. Bright lights would cause the
-              LED to be bright blue like the sky. Then medium dark
-              the LED would be a pink, and really dark would be orange/yellow. I did get this to work, but the colors didn't look different
-              when I videotaped it. So, I had to change the colors to more distinct colors. When it's bright, the LED is blue. When it's
-              semi-bright, the LED is red. And when it's dark the LED is green.
+              The loop() constantly runs and listens for a signal from the IR remote. It first checks to see if the IR
+              sensor is getting any signal. Then I have multiple if statements checking if a certain button on the remote is
+              pressed. If 1 is pressed, the LED strip will turn ON because I tell the transistor pin, through the analogWrite(),
+              to turn on the voltage. The ON corresponds to the 255 because it's a 100% on duty cycle. If 3 is pressed, the
+              LED strip will turn OFF because I tell the transistor pin, through the analogWrite(), to turn voltage OFF. The
+              OFF corresponds to the 0 because I have a 0% on duty cycle. If 2 is pressed, the LED strip will flash 5 times.
+              I did this with a for loop and turning the transistor ON and OFF because our transistor acts like a switch
+              (the gate is open or closed).
+              If you press the + button, the LED strip will fade from dark to light, and if you press the - button it will
+              fade from light to dark. I faded the LED strip with a for-loop and changing the value I give to the analogWrite(), thus
+              changing the duty cycle and brightness of the LED lights.
             <p>
 
             <pre><code>
               // Lia Johansen
-              // January 23, 2020
-              // Assignment 3: Input Output!
+              // A4: High(er) Voltage and Transistor
+              // February 15, 2020
+
+              // Import library for IR sensor/remote
+              #include < IRremote.h >
+
+              // Set up constants
+              const int sensorPin = 9; // Pin for the IR sensor (remote)
+              const int transPin = 10; // Pin for the transistor
+
+              // creates an object of type IRrecv
+              IRrecv irrecv(sensorPin);
+              // create variable of type decoderesults (to store the results)
+              decode_results results;
 
 
-              // Constants don't change. They are for assigning names to the pins
-              const int photoResistor = A0;  // Analog input pin for the photoresistor
-              // Constants for the RGB LED
-              const int redLED = 9; // pin number for red LED
-              const int greenLED = 10; // pin number for green LED
-              const int blueLED = 11; // pin number for blue LED
-
-              // value that will be assigned to photoresistor
-              // based on the analogRead (values: 0 - 1023)
-              int sensorValue = 0;
-              // value from photoresistor that will be 'remapped'
-              // to a new wanted range
-              int changedValue = 0;
-
-
-              void setup() {
-                // initialize serial communications so
+              void setup(){
+                // Initialize serial communications so
                 // I can see my values in the serial monitor
                 Serial.begin(9600);
 
-                // initialize photoresistor as input
-                pinMode(photoResistor, INPUT);
+                // Set up the infared sensor aka start the IR receiver
+                irrecv.enableIRIn();
 
-                // initalize RGB LED pins to output so I can use analogWrite()
-                for (int i = 9; i < 12; i++) {
-                  pinMode(i, OUTPUT);
+                // Tells the light on the arduino to blink if
+                // the receiver gets a signal
+                irrecv.blink13(true);
+
+                // initializes transistor pin as output
+                pinMode(transPin, OUTPUT);
+              }
+
+
+              void loop(){
+                // Check to see if something was received by the IR Sensor. If it did then
+                // it will be true, if no signal it will be false
+                if (irrecv.decode(&results)){
+
+                  // If 1 on remote is pressed, Turn LED strip ON
+                  if (results.value == 0xFF30CF) {
+                    Serial.println("1"); // Print 1 to serial monitor
+                    // Make LED strip full brightness ON (through the transistor)
+                    analogWrite(transPin, 255);
+                  }
+
+                  // If 2 on remote is pressed, blink the LED strip 5 times
+                  if (results.value == 0xFF18E7) {
+                    Serial.println("2"); // Print 2 to serial monitor
+                    // Loop that runs 5 times
+                    for (int i = 0; i < 5; i ++) {
+                      // Make LED strip full brightness (through the transistor)
+                      analogWrite(transPin, 255);
+                      // Wait .3 seconds
+                      delay(300);
+                      // Turn LED strip off (through the transistor)
+                      analogWrite(transPin, 0);
+                      // Wait .3 seconds
+                      delay(300);
+                    }
+                  }
+
+                  // If 3 on remote is pressed, turn LED strip OFF
+                  if (results.value == 0xFF7A85) {
+                    Serial.println("3"); // Print 3 to serial monitor
+                    // Turn LED strip off to dark (through the transistor)
+                    analogWrite(transPin, 0);
+                  }
+
+
+                  // If + on remote is pressed, fade the LED strip from dark to bright
+                  if (results.value == 0xFF629D) {
+                    Serial.println("+"); // Print + to serial monitor
+                    // Loop that fades the LED strip to full brightness
+                    for (int i = 0; i < 256; i += 5) {
+                      // make LED strip certain value (i)
+                      analogWrite(transPin, i);
+                      // Wait .02 seconds in order to actually see change
+                      delay(20);
+                      // Print i to serial monitor for debugging
+                      Serial.println(i);
+                    }
+                  }
+
+                  // If - on remote is pressed, dim the LED strip to from bright to dark
+                  if (results.value == 0xFFA857) { // 5
+                    Serial.println("-");
+                    // Loop that dims the LED strip to dark
+                    for (int i = 255; i >= 0; i -= 5) {
+                      // make LED strip certain value (i)
+                      analogWrite(transPin, i);
+                      // Wait .02 seconds in order to actually see change
+                      delay(20);
+                      // Print i to serial monitor for debugging
+                      Serial.println(i);
+                    }
+                  }
+
+                  // Resets the IR Receiver
+                  irrecv.resume();
                 }
               }
 
-              void loop() {
-                // Attain the voltage from photoResistor based on light
-                sensorValue = analogRead(photoResistor);
-                // Then translate that number with map to new a range of 0 - 255
-                changedValue = map(sensorValue, 240, 990, 0, 255);
-
-
-                // Note: Dark is around 240 and super bright is around 990 (on the scale 0 - 1023)
-
-                // If the light value from photoresistor is small (it means it's dark)
-                // LED changes to lime green
-                if (changedValue < 60) {
-                  // make the red LED almost full brightness
-                  analogWrite(redLED, 200);
-                  // make the green led full brightness
-                  analogWrite(greenLED, 255);
-                  // turn off blue LED
-                  analogWrite(blueLED, 0);
-                }
-                // If the light value from photoresistor is normal brightness
-                // LED changes to bright, deep red
-                else if (changedValue >= 60 && changedValue < 170) {
-                  // make the red LED full brightness
-                  analogWrite(redLED, 255);
-                  // turn off green LED
-                  analogWrite(greenLED, 0);
-                  // turn off blue LED
-                  analogWrite(blueLED, 0);
-                }
-                // light value from photoresistor is high (light source is really bright)
-                // LED changes to a light blue
-                else {
-                  // make the red LED less than half brightness
-                  analogWrite(redLED, 77);
-                  // make green LED almost full brightness
-                  analogWrite(greenLED, 204);
-                  // make blue LED full brightness
-                  analogWrite(blueLED, 255);
-                }
-
-                // print the two sensor values to the Serial Monitor:
-                // Print the photoresistor sensor value
-                Serial.print("sensor value = ");
-                Serial.print(sensorValue);
-                // print a line space
-                Serial.println();
-                // print the photoresistor's value changed after the
-                // remapping the values to a new range
-                Serial.print("\t changed value after map()  = ");
-                Serial.println(changedValue);
-
-
-                // delay 0.01 milliseconds before the next loop
-                delay(10);
-              }
             </code></pre>
           </div>
 
