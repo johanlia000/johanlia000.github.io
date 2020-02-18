@@ -49,38 +49,13 @@
 
               Next, I needed to make sure that the current flowing through the transistor is not more than 32A (that is the
               maximum amount of current our transistors can handle). So, I needed to calculate the amount of current
-              flowing through my transistor based on my LED strip. <br></br>
+              the LED stip was drawing. <br></br>
 
-              The box the LED Strip came in says we have <b>300 LEDS</b>. Each LED section contains <b>3 white LEDs and
-              one resistor</b>. <br></br>
-
-              Since there are 300 LEDs total there are <b>100 sections</b> (300LEDs/3LEDs per section).<br></br>
-
-              Looking at just one section; I found the current: <br>
-              Each white LED has a <b>3.6 voltage drop</b>. <br>
-              There are 3 white LEDs so <b>3V * 3.6V = 10.8 voltage drop</b><br>
-              The resistor is a <b>181Ω</b><br>
-              And the starting voltage is <b>12V</b><br>
-              Using <b>V = IR</b><br>
-              <b>12v - 10.8v = I * 181Ω</b><br>
-              <b>1.2V / 181Ω = I</b><br>
-              <b>1.2V / 181Ω = 0.0066A</b><br></br>
-
-              Since all of the LED sections are in parallel, to get the total current of the whole LED strip, I just
-              add up all of the currents.<br>
-              There are 100 sections so <b>0.0066A * 100sections = 0.66A total</b><br></br>
-
-              The LED strip draws 0.66A. This is way less than 32A the transistor can support.<br></br>
-
-              I wanted to double check my answer using a different method. <br>
-              I first calcualted the total resistance of the LED strip. All of the LED sections are in parallel.
-              So, the total resistance is <b>1/R = 1/181Ω * 100 sections</b>. This equals a total resistance of <b>1.81Ω.</b><br>
-
-              Then I did <b>V(total) = I(total) + R(total)</b>, which is <b>12V - 10.8V = I(total) * 1.81Ω</b><br>
-              so <b>1.2V / 1.81Ω = I(total)</b><br>
-              <b>I(total) = 0.66A</b><br></br>
-              This aligns with the calculation I got above, so I knew that the transistor would be able to handle
-              the amount of current the LED strip draws.
+              I started with the equation <b>P = VI.</b> <br>
+              I looked at the LED strip box and saw the <b>P = 18watts</b> and <b>V = 12V</b><br>
+              Plugging that in I get <b>18watts = 12V * I</b><br>
+              Solve for I, <b>18watts / 12V = 1.5A</b><br>
+              This is way under 32A that my transistor can handle, so it was safe to use. 
             </p>
 
 
