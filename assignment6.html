@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Assignment 6: The Web Talks Back!</title>
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+      <div class='assignment-top'>
+        <center><h1>Assignment 6: The Web Talks Back!</h1></center>
+
+        <div class='assignment-row'>
+          <div class='column-header'>
+            <br>
+            <h3><b>Overview</b></h3>
+            <p>
+              For this assignment I created a webpage with p5.js that interacts with
+              my sensor data coming from my arduino over serial, and vice versa; interacting with computer keyboards
+              will directly affect an LED light on the arduino board. I chose to make a panda on
+              the webpage to make it interactive. I used a thermoresistor and button as my two sensors
+              that control the colors of the panda.
+            </p>
+
+            <br>
+            <h3><b>Schematic</b></h3>
+            <br>
+            <center><img src="Photos/A6/schematic.jpg" width=600></a></center>
+            <br>
+            <p>
+              I created a schematic for this project in order to grasp what circuit I was going to make. I calculated the
+              values of the resistors needed for the voltage divide, button, and blue LED.
+              I wanted my button and thermoresistor to interact with my web page I created
+              and change the colors of my panda on the web page. Then I wanted the `1` and `2` keys on a keyboard
+              to turn on and off the LED.
+            </p>
+
+            <p>
+              I connected my button to the 5V and had pin 2 connect after the button to allow me to read the
+              button's value of ON (1) or OFF (0). I did this with digitalRead() so I could use pin 2; I also used a 220Ω resistor.
+              Then, I created a voltage divide with the thermoresistor and another resistor, which I chose to be 10kΩ.
+              I connected the A0 pin between the thermoresistor and 10kΩ resistor so I could read the V_out value,
+              and A0 allows me to use analogRead(). I used a 100Ω resistor with the blue LED to make sure that the right amount of
+              current would flow through the LED. The blue LED is connected to pin 7 because all I do is write digitalWrite(HIGH or LOW) to turn
+              the LED on or off.
+              My calculations for my chosen resistors are below:
+            </p>
+
+            <br>
+            <center><img src="Photos/A5/button.jpg" width=500></a></center>
+            <center><i><p>Calculations for finding the resistor for the button circuit</i></p></center>
+            <br>
+            <center><img src="Photos/A6/blueLED.jpg" width=500></a></center>
+            <center><i><p>Calculations for finding the resistor for the BLUE LED</i></p></center>
+            <br>
+            <center><img src="Photos/A5/calc1.jpg" width=500></a></center>
+            <center><img src="Photos/A5/calc2.jpg" width=500></a></center>
+            <br>
+
+            <p>
+              In summary, I needed the find the best resistor for R2 that would create a voltage divide with the thermoresistor.
+              I needed an R2 that would give me the largest range of V_out values. First, I tested the highest and lowest resistance
+              of my thermoresistor with my multimeter. When I put an ice cube on it, the resistance was <b>25kΩ</b> and when I put
+              my hand on it, the resistance was <b>9kΩ.</b> My R1 range was <b>9kΩ - 25kΩ.</b> I know that
+              the thermoresistor can have lower/higher resistance values, but it's hard for me to get it warmer than my own body temperature.
+              Then, I wanted two things. First, I needed an resistor that would give me the largest V_out range with the thermoresistor.
+              Second, I needed R2 to not allow too much current flow from power to ground. I used the V_out equation to calculate the V_out
+              range with R2 being 100Ω, 220Ω, 2kΩ, 10kΩ, and 100kΩ, and then chose the resistor with the largest V_out range.
+              I found that the <b>10kΩ resistor would be the best</b> because the V_out range, which was 1.2V, was the highest. It also
+              doesn't allow too much current; <b>0.26mA</b> is way less than the max current of 40mA that the arduino pin can supply.
+
+            </p>
+
+            <br>
+            <center><img src="Photos/A5/rangeThermo.jpg" width=600></a></center>
+            <center><i><p>I used Matlab to quickly calculate V_out ranges for each resistor in order to see variance</i></p></center>
+            <br>
+
+            <p>Finally, I calculated the antipicated values I was going to read from analogRead(A0). First,
+              analogRead() gives values between 0 - 2023; 0 corresponds to 0V and 1023 corresponds to 5V.
+              Then from the calculations above, I knew the V_out values I was going to get at the end points (highest and lowest resistance)
+              with the 10kΩ resistor. After calculationg, I anticipated that I would get an <b>analogRead() range of about 292 - 538</b>.
+              It would be 292 when it was cold (ice) and 538 when it was warm (hand). This was fairly correct, but I did leave the ice on for longer
+              when I was doing my demonstration so I got values more like 240.
+            </p>
+
+            <br>
+            <center><img src="Photos/A5/analog.jpg" width=500></a></center>
+
+
+
+
+            <br>
+            <h3><b>Breadboard Circuit & Web Page</b></h3>
+            <br>
+
+            <center><img src="Photos/A6/topView.jpg" width=600></a></center>
+            <center><i><p>Top view of my circuit on the breadboard</i></p></center>
+            <br>
+            <center><img src="Photos/A6/circuitPanda.jpg" width=600></a></center>
+            <center><i><p>View of my circuit and webpage</i></p></center>
+            <br>
+            <center><img src="Photos/A6/panda1.jpg" width=600></a></center>
+            <center><i><p>Photo of webpage with panda</i></p></center>
+            <br>
+            <center><img src="Photos/A6/panda2.jpg" width=600></a></center>
+            <center><i><p>Another photo of webpage with panda with different coloring</i></p></center>
+
+
+
+            <br>
+            <h3><b>Videos of sensors interacting with the web page</b></h3>
+
+            <p>
+              I split my demonstration into four separate videos,
+              because one video would be too long and too large of a file to upload.
+              The videos are split: keyboard and LED, button sensor, thermoresistor warm, thermoresistor cold.
+            </p>
+
+            <p>
+              When the button is pressed, the panda's ears and tie go from cheerful colors to
+              icecream colors. Then when the thermoresistor gets warm, like when you put your warm
+              fingers over it, the panda's nose goes from pink to red. When the thermoresistor becomes cold, like
+              when you place an ice cube on it, the panda's nose goes from pink to darker shades of blues. Finally,
+              when you press the 2 key on the laptop the LED turns on, and when you press the 1 key on the laptop
+              the LED turns off.
+            </p>
+
+            <br>
+            <center><video width="600" controls>
+              <source src="Photos/A6/buttonPress.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of the button changing the panda's ears and bow color</i></p></center>
+            <br>
+
+            <center><video width="600" controls>
+              <source src="Photos/A6/thermoWarm.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of the my warm hand changing the panda's nose color</i></p></center>
+            <br>
+
+            <center><video width="600" controls>
+              <source src="Photos/A6/thermoCold.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of the an ice cube changing the panda's nose color</i></p></center>
+            <br>
+
+            <center><video width="600" controls>
+              <source src="Photos/A6/blueLED.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <center><p><i>Video of laptop keyboard turning LED on and off</i></p></center>
+            <br>
+
+            <br>
+
+
+            <br>
+            <h3><b>Arduino Code </b></h3>
+            <p>
+              To get the sensors to change the Panda's colors on the web page,
+              I coded the arduino to print out the sensor's values to the serial monitor so that I could retrieve those values
+              and use in my javascript code. To get the 1 and 2 keys on a laptop keyboard to turn an LED on and off, I coded
+              the arduino to read in serial data sent by the javascript code. This is the part where the web talks to the arduino.<br></br>
+
+              First, I set up my constants; I set up the button's, thermoresistor's, and blue LED's pin number.
+              In the set up I initalize the serial communcation so I can print the sensor values to the serial monitor and
+              can retrieve serial communcation data from the javascript code.
+              I also initalize the thermoresistor pin and button pin as an input and the LED as an output.
+              Then in the loop, I read in the value of the button state (either High-1 or low-0) and assign it to a
+              buttonValue, and I read in the thermoresistor's value (0 - 1023) and assign it to thermoValue.
+              I can use analogRead() with the thermoresistor because it's in pin A0. Then I print the buttonValue and
+              thermoValue to the serial monitor in the format [buttonValue, thermoValue]; it's in this format so the javascript
+              can use JSON.parse to turn it into an array. This is so I can easily extract both sensor values in the javascript code.
+              Then it checks if there's incoming serial data and if there is, it reads it in and assigns it to a variable. If the read in
+              value is 49, it means that someone pressed the `1` key and it digitalWrites the blue LED to LOW, which turns it off. If the
+              value is 48, it means that someone pressed the `2` key and it digitalWrites the blue LED to HIGH, which turns it on.
+              Then it delays .3 seconds before looping again.
+            <p>
+
+            <pre><code>
+              // Lia Johansen
+              // Assignment 5
+              // February 20, 2020
+
+              // Setting up constants and variables
+              //
+              // Analog input pin for the photoresistor
+              const int thermo = A0;
+              // Digital input pin for button
+              const int button = 2;
+              // Input pin for blue LED
+              const int blueLED = 7;
+
+              // value that will be assigned to thermoresistor
+              // based on the analogRead (values: 0 - 1023)
+              int sensorValue = 0;
+              // value from thermoresistor that will be 'remapped'
+              // to a new wanted range
+              int changedValue = 0;
+
+
+              void setup() {
+                // Initialize serial communications so
+                // I can see my values in the serial monitor
+                Serial.begin(9600);
+                // initalize thermoresistor pin as input
+                pinMode(thermo, INPUT);
+                // initalize button pin as input
+                pinMode(button, INPUT);
+                // initalize blueLED as output
+                pinMode(blueLED, OUTPUT);
+              }
+
+              void loop() {
+                // read the state of the pushbutton value
+                // and assign it to buttonValue variable
+                int buttonValue = digitalRead(button);
+
+                // read the value of the thermoresistor (0 - 1023)
+                // and assign it to the thermoValue variable
+                int thermoValue = analogRead(thermo);
+
+                // Print the button value and thermoresistor value
+                // to the serial monitor is an 'array' [button, thermo]
+                Serial.print("["); // print [ to serial monitor
+                Serial.print(buttonValue); // print button's value to serial monitor
+                Serial.print(","); // print , to serial monitor
+                Serial.print(thermoValue); // print thermoresistor's value to serial monitor
+                Serial.println("]"); // print ] to serial monitor
+
+
+                if (Serial.available() > 0) {   // if there's serial data
+                  int inByte = Serial.read(); // Read in the value from serial
+                  //Serial.println(inByte); // Used this for debugging
+                  if(inByte == 49) { // If the 1 button is pressed
+                    // Turn off the blue LED
+                    digitalWrite(blueLED, LOW);
+                  }
+                  if(inByte == 50) { // if the 2 button is pressed
+                    // Turn on the blue LED
+                    digitalWrite(blueLED, HIGH);
+                  }
+                }
+
+                // delay .3 of a second before next loop
+                delay(300);
+              }
+            </code></pre>
+
+
+            <br>
+            <h3><b>Javascript Code </b></h3>
+            <p>
+              I got the skeleton for this code from the hcde439-example3 sketch.js and then edited it to make it mine.
+
+              The javascript code takes in and uses the information from the serial communication to affect the web page.
+              The code first creates the variables needed for the serial communication and values for the sensors
+              (button and thermoresistor). The setUp() initalizes the serial port for communication, creates the canvas,
+              sets the canvas' background color, and sets the angle to be in degrees (this is needed because I rotate some shapes
+              later on). The serialEvent() function reads in the line of data from the serial monitor (which is in [x, y] string form) and
+              parses the JSON string into an array. Then it assigns the button and thermoresistor variables to the values from the data array.
+              The function keyPressed() is always listening to see if a key on the keyboard is pressed. If a key is pressed it writes the
+              pressed key's value to the serial so that the arduino code can use it.
+
+              The function draw() draws the panda onto the web page and colors the panda
+              based on the button and thermoresistor values. Finally, I have my helper methods that the draw() function calls in order to draw the
+              panda. I did this because I needed each part of the panda to be a different color based on the sensors' values. The panda() function
+              takes in an two RGB values and assigns it to the color of the inner and out panda ears. The bow() function also takes
+              two RGB values and assigns it to the RGB colors of the bow tie. Finally, the drawNose() function takes in an R, G, and B value
+              and assigns it to the RGB color of the nose.
+
+            <p>
+
+            <pre><code>
+              var serial; // variable to hold an instance of the serialport library
+              var portName = '/dev/tty.usbmodem14101' //name of my port
+              var dataarray = []; //some data coming in over serial!
+
+              // Variables for sensors
+              var button = 0; // button sensor value
+              var thermo = 0; // thermoresistor sensor value
+
+              // Constant for Panda's head width/height
+              let head = 200; // head's width/height
+
+              function setup() {
+                serial = new p5.SerialPort();       // make a new instance of the serialport library
+                serial.on('list', printList);       // set a callback function for the serialport list event
+                serial.on('connected', serverConnected); // callback for connecting to the server
+                serial.on('open', portOpen);        // callback for the port opening
+                serial.on('data', serialEvent);     // callback for when new data arrives
+                serial.on('error', serialError);    // callback for errors
+                serial.on('close', portClose);      // callback for the port closing
+
+                serial.list();                      // list the serial ports
+                serial.open(portName);              // open a serial port
+                createCanvas(1200, 800);            // creates the canvas for web page
+                background(0x08, 0x16, 0x40);       // sets the background color of the canvas
+
+                // Make the angle in degrees rather than radians
+                angleMode(DEGREES);
+              }
+
+              // get the list of ports:
+              function printList(portList) {
+               // portList is an array of serial port names
+               for (var i = 0; i < portList.length; i++) {
+               // Display the list the console:
+                 print(i + " " + portList[i]);
+               }
+              }
+
+              // function for debugging the serial port
+              function serverConnected() {
+                print('connected to server.');
+              }
+              // function for debugging the serial port
+              function portOpen() {
+                print('the serial port opened.')
+              }
+              // function for debugging the serial port
+              function serialError(err) {
+                print('Something went wrong with the serial port. ' + err);
+              }
+              // function for debugging the serial port
+              function portClose() {
+                print('The serial port closed.');
+              }
+
+
+              // function that reads in the serial and extracts the button and
+              // thermoresistor values
+              function serialEvent() {
+                if (serial.available()) {
+                  var datastring = serial.readLine(); // readin line from serial monitor
+                  var newarray; // dummy variable to make sure we dont have errors
+                  try {
+                    newarray = JSON.parse(datastring); // can we parse the serial
+                    } catch(err) {
+                        //console.log(err);
+                  }
+                  if (typeof(newarray) == 'object') { // Make sure that the JSON parsed is an object
+                    // assign dataaray to be newarray
+                    // this is the array with the sensor data
+                    dataarray = newarray;
+                    // Assign the button value to the value in the first spot in array
+                    button = dataarray[0];
+                    // print out button value for debugging purposes
+                    console.log("button value " + button);
+                    // Assign the thermo value to the value in the second spot in array
+                    thermo = dataarray[1];
+                    // print out the thermo value for debugging purposes
+                    console.log("thermo value " + thermo);
+
+                  }
+                  // print out the line that we read from the serial
+                  console.log("got back " + datastring);
+                }
+              }
+
+              // Function that is always listening to see if a key is pressed
+              function keyPressed() {
+                // Debug purposes: print that user pressed key
+              	console.log("writing key");
+                // Debug purposes: print key value
+                console.log("key value: "+ key);
+                // Write the key value to the serial
+                // so the arduino code can use it
+                serial.write(key);
+              }
+
+
+
+              // Function that draws panda on the web page
+              function draw() {
+                // If the button is not pressed
+                if (button == 0) {
+                  // Draw the panda with teal and yellow
+                  panda(136,216,176, 255,238,173);
+                  saying();
+                  // draw the bow to be pink and orange
+                  bow(255,111,105,255,204,92);
+                } else if (button == 1) { // the button is pressed
+                  // Draw the panda with brown and pink
+                  panda(107,62,38, 255,197,217);
+                  // Draws the panda saying words
+                  saying();
+                  // draw the bow to be teal and orange
+                  bow(194,242,208,255,203,133);
+                }
+
+
+                if (thermo >= 0 && thermo < 350) { // if the thermo value is low (aka really cold)
+                  // draw nose to be dark blue
+                  drawNose(1,31,75);
+                } else if (thermo >= 350 && thermo < 400) { // if thermo value is cold
+                  // draw nose to be medium blue
+                  drawNose(0,91,150);
+                } else if (thermo >= 400 && thermo < 460) { //if thermo value is sort of cold
+                  // draw nose to be bright, light blue
+                  drawNose(179,205,224);
+                } else if (thermo >= 460 && thermo < 510){ // if thermo value is at room temp
+                  // draw nose to be light pink
+                  drawNose(248,160,159);
+                } else if (thermo >= 510) { // if thermo value is high (warm hand)
+                  // draw nose to be red
+                  drawNose(182,28,28);
+                }
+              }
+
+              // function that draws the panda's nose
+              // takes in RGB values for fill() that will change
+              // the nose color
+              function drawNose(R, G, B){
+                //  Make nose color the RGB color of input values
+                fill(R,G,B);
+                // draw ellipse (the nose)
+                ellipse(200, 240, 50, 40);
+              }
+
+              // Function that draws the panda telling his
+              // name and instructions on how to light up the LED
+              function saying(){
+                fill(250, 250, 250); // make background white
+                noStroke(); // no stroke
+                rect(335, 160, 270, 120); // draws white rectangle
+                // draws white triangle, which is attached to white
+                // rectangle like speech bubble
+                triangle(335, 280, 335, 250, 238+50, 325-40);
+                // Make fill a brown red
+                fill(76,47,46);
+                // Make text font size 20
+                textSize(20);
+                // Variable to hold panda saying his name
+                var intro = "Hello! My name is Po!"
+                // Draws the intro inside the white speech rectangle
+                text(intro, 375, 200);
+                // Make the font size 16
+                textSize(16);
+                // Variable to hold instructions to turn on LED
+                var on = "Press the 2 key to light up the LED"
+                // Draws on instructions inside white speech rectangle
+                text(on, 345, 225);
+                // Variable to hold instructions to turn off LED
+                var off = "Press the 1 key to turn off the LED"
+                // Draws off instructions inside white speech rectangle
+                text(off, 345, 250);
+              }
+
+
+              // Function that draws the panda's bow
+              // takes in 2 sets of RGB values for fill() that will change
+              // the bow color
+              function bow(R, G, B, R2, G2, B2){
+                // make the triangle bow color the RGB color of input values
+                fill(R,G,B);
+                // No stroke line
+                noStroke();
+                // Draw triagle for bow
+                triangle(205, 297.5, 238, 270, 238, 325);
+                // Draw triagle for bow
+                triangle(205, 297.5, 172, 270, 172, 325);
+                // make the circle of bow color the R2G2B2 color of input values
+                fill(R2,G2,B2);
+                // Draw the ellipse for the center of the bow
+                ellipse(205, 297.5, 20, 20);
+              }
+
+
+              // Function draws the panda's head and takes in
+              // RGB values for fill() that will change
+              // the color of the panda's inner ear
+              function panda(R, G, B, R2, G2, B2){
+                // Set background to light green
+                background(188,198,147);
+
+                // Code for drawing the ears
+                // Fill the ears the RGB input color
+                fill(R,G,B);
+                // big ears have no stroke
+                noStroke();
+                // Draws the two outer ears
+                ellipse(120, 120, 100, 90);
+                ellipse(270, 120, 100, 90);
+                // Fill inner ears with the R2G2B input values
+                fill(R2,G2,B2);
+                // Draws the two inner ears
+                ellipse(120, 120, 70, 60);
+                ellipse(270, 120, 70, 60);
+
+                // Draw the panda's head
+                // Fill it white
+                fill(250,250,250);
+                // Have no stroke
+                noStroke();
+                // Draw actual shape of the head
+                ellipse(200, 200, head, head);
+
+                // Code for drawing the eyes
+                // Left eye
+                push(); // Start a new drawing state
+                // make fill color black
+                fill(0,0,0);
+                // make sroke white
+                stroke(250, 250, 250);
+                // translate the rotate point
+                translate(160, 180);
+                // rotate the eye 20 degrees
+                rotate(20);
+                // make the ellipse mode to center
+                ellipseMode(CENTER);
+                // draw the left eye
+                ellipse(0, 0, 50, 75);
+                pop(); // Restore original state
+
+                // Right eye
+                push(); // Start a new drawing state
+                // make fill color black
+                fill(0,0,0);
+                // make stroke white
+                stroke(250, 250, 250);
+                // translate the rotate point
+                translate(240, 180);
+                // rotate the eye -20 degrees
+                rotate(-20);
+                // make the ellipse mode to center
+                ellipseMode(CENTER);
+                // draw the right eye
+                ellipse(0, 0, 50, 75);
+                pop(); // Restore original state
+
+                // Code for the Inner eyes
+                // make fill color light, lilac color
+                fill(181,167,182);
+                // make the stroke black
+                stroke(0, 0, 0);
+                // draw the two inner eyes
+                ellipse(160, 190, 20, 20);
+                ellipse(240, 190, 20, 20);
+              }
+            </code></pre>
+
+            <br>
+            <h3><b>HTML Code </b></h3>
+            <p>
+              I got this code from the hcde439-example3 index.html file.
+            <p>
+
+            <center><img src="Photos/A5/index.jpg" width=600></a></center>
+
+
+
+          </div>
+
+
+
+          </div>
+      </div>
+      <div class='footer'></div>
+
+    </body>
+
+</html>

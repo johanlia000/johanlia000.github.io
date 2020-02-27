@@ -83,6 +83,7 @@ h3 {
 
 .assignment-row {
   display: flex;
+  justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
   width: 50%;
