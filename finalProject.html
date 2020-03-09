@@ -12,14 +12,20 @@
 
     <body>
       <div class='assignment-top'>
-        <center><h1>Final Project: Built-A-Dog</h1></center>
+        <center><h1>Built-A-Dog: Rover</h1></center>
 
         <div class='assignment-row'>
           <div class='column-header'>
             <br>
             <h3><b>Overview</b></h3>
             <p>
-              For this assignment...  <br></br>
+              For this assignment I integrated my circuit skills I learned in this course to
+              create an interactive stuffed dog. I designed my circuit, tested and altered my code,
+              and soldered the circuit and put it into a stuffed dog named Rover.
+
+              My project takes input from a capacitive sensor to affect
+              an LED strip that is on the dog. When you pet Rover's head, the LED strip
+              fades from dark to light repeatedly; I wanted this to mimic him being happy.
             </p>
 
 
@@ -28,58 +34,370 @@
             <br>
             <center><img src="Photos/Final/brainstorm.jpg" width=500></a></center>
             <br>
-
             <p>
               Here are my ideas that I brainstormed. These ranged in difficulty and number of
               components.
               <br></br>
               My first idea was to have an 'alert' system for your room. When someone
-              comes walking toward your room, a glowing ball would alert you by flashing red.
+              comes walking toward your room, a glowing ball would alert you by flashing red lights.
               <br></br>
               My next idea was to use the joystick as a 'pen' on the LED screen; sort of like an etch a sketch.
               <br></br>
               The next idea explored ways to spice up my diffuser. I thought it would be cool if
-              the diffuser glowed different colors like a rainbow based on temperature or humidity.
+              my diffuser glowed different colors like a rainbow based on temperature or humidity.
               I could also set up the remote to be able to change the colors.
               <br></br>
-              My last idea was to create a 'prison' for your technology when you are studying and doing work.
-              If you try and grab it, an alarm will go off and lights will blink red.
+              Another idea was to create a 'prison' for your technology when you are studying and doing work.
+              If you try and grab your phone or technology inside the prison, an alarm will go off and lights will blink red.
             </p>
 
             <br>
             <center><img src="Photos/Final/dogIdea.jpg" width=500></a></center>
             <br>
             <p>
-              Ultimately, I choose my <b>stuffed dog</b> idea. I really loved Build-A-Bears when I was younger
-              and now after learning about circuits and sensors, I wanted to try and create my own
-              handmade Build-A-Bear. This is also one of the more feasible ideas as I can use the photoresistor,
-              motor, and LED lights and strip. Depending on time and ability I will choose a few of the features
-              to implement for the stuffed dog.
+              My favorite idea was a stuffed interactive dog. I had a lot of different interactive
+              ideas such as petting the dog's back and his collar would light up, touching
+              his paws and his tail would wag, or boop his nose and he would say "I love you" or
+              his ears could wiggle.
+
             </p>
 
             <br>
             <h3><b>Project Concept</b></h3>
-            <br>
+            <p>
+              I chose my <b>stuffed dog</b> idea. I really loved Build-A-Bears when I was younger
+              and now after learning about circuits and sensors, I wanted to try and create my own
+              handmade Build-A-Bear. This was one of the more feasible ideas, but I did not have time to
+              implement all of the sub-ideas for the stuffed dog.
+            </p>
+            <p>
+              My project is a stuffed interactive dog that you
+              can pet and make happy. Specifically, if you pet his head, his bow will repeatedly fade from light to dark to
+              communciate that he is happy.
+            </p>
 
+
+            <br>
+            <h3><b>Project Material List</b></h3>
+            <ul>
+              <li>1 Stuffed dog</li>
+              <li>Ribbon</li>
+              <li>LED strip</li>
+              <li>Wall plug</li>
+              <li>1 N-MOSFET Transistor</li>
+              <li>1 10M resistor</li>
+              <li>Aluminum foil</li>
+              <li>Wires</li>
+              <li>Arduino Board</li>
+              <li>Soldering kit</li>
+              <li>Sewing kit</li>
+            </ul>
 
             <br>
             <h3><b>Circuit Schematic</b></h3>
             <br>
 
+            <center><img src="Photos/Final/schematic.jpg" width=650></a></center>
+            <br>
+
+            <p>
+              To begin my project, I sketched the schematic of my circuit with the transistor and LED and
+              my circuit with the capacitive sensor. I also calculated the current going through my transistor and
+              the reistsor needed for the capacitive sensor.
+            </p>
+            <p>
+              I have a larger power source of 12V coming from the wall to the arduino, and I have the LED strip (our load)
+              connected to the V_in pin; the V_in pin is supplying the 12V to the LED strip. Then I have my N-MOSFET
+              transistor. The D pin of the transistor is connected to the LED strip. The S pin is connected to ground,
+              and the G pin is connected to pin ~10. The G pin is connected to ~10 because it has the ~, which means
+              that I can analogWrite() to it so my LED strip can fade. The other part of my schematic is the capacitive sensor.
+              I have the send pin as pin 8 and the recieve pin as pin 7. In between these pins is my resistor and the sensor.
+              I chose the resistor to be 10MΩ and the sensor is a wire that will be in the stuffed dog.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/transistor.jpg" width=650></a></center>
+            <br>
+            <p>
+              I chose to use a 10MΩ resistor because the documentation states that a 10MΩ will start responding
+              4-6inches away. While I did not need it to sense 4-6 inches, I knew that my dog's fur would affect the
+              sensor's value.
+            </p>
+
             <br>
             <h3><b>How it works</b></h3>
             <br>
+            <center><img src="Photos/Final/doglight.jpg" width=450></a></center>
+            <p>
+              This is an overview on how my interactive dog works; I will dive deeper into the process in the next section!
+              Overall, I wanted someone to be able to pet the Rover's head and have an LED strip light up.
+            </p>
+            <p>
+              I have the LED strip connected to the N-MOSFET transitor and the arduino board.
+              Then I have the capacitive sensor, which is just a wire connected to a resistor and the arduino board.
+              The wire is able to sense if someone touches it or gets near it, and the value of the resistor affects
+              the sensitivity of the wire.
+            </p>
+            <p>
+              The arduino is inside the dog's belly, and the LED strip, which is still attached to the arduino board,
+              pokes through the dog's fur and wraps around his torso and is 'hidden' by a ribbon and bow. The wire (the capacitive sensor)
+              is poked through the dog's head; the fur semi hides the wire. So, when a person pets the dog's head (near the wire) the
+              capacitive sensor has a high value. The code is then able to read in this high value and tells the LED strip to
+              fade from dark to light repeatedly until the sensor value decreases, which means someone is no longer petting the dog's head.
+              To get the LED strip to fade, I analogWrite() increasing values (0 - 255) to the transistor pin, which is hooked to the ~ pin and
+              directly affects the brightness of the LED strip.
+              The values passed to analogWrite() affects the duty cycle, which makes the LED strip light up in different brightnesses.
+              Based on those analogWrite() values, the transistor fades the LED strip.
+              If no one is petting the dog's head, the LED strip is off, which means the transistor turns the voltage OFF (0% duty cycle).
+            </p>
+            <br>
+
+
+            <h3><b>The process</b></h3>
+
+            <br>
+            <center><img src="Photos/Final/solderLED.jpg" width=350></a></center>
+            <p>
+              The first step was to solder wires onto the portion of LED I wanted to use. In my previous project, I used
+              the whole LED strip so I didn't have to solder anything. But for my dog, I only needed a small portion of the strip.
+              After soldering the wires on, I could start creating my circuit on the breadboard in order to roughly test my sensors and
+              test the LED strip getting power from the wall.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/firstBreadboard.jpg" width=600></a></center>
+            <p>
+              At this point, I thought I was going to have two capacitive sensors, one on the head and one on the paw. That's why
+              there are two circuits for capacitive sensing on the breadboard.
+            </p>
+
+            <br>
+            <center><video width="600" controls>
+              <source src="Photos/Final/testCircuit.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <p>
+              Then I uploaded my code onto my arduino and plugged in the wall socket.
+              At this point I got both sensors to detect my touch and do different things to the LED strip.
+            </p>
+
+
+            <br>
+            <center><img src="Photos/Final/testDog1.jpg" width=600></a></center>
+            <p>
+              Since I got the circuit to work on the breadboard, it was time to test the sensor inside my stuffed dog.
+              This was the point where I discovered how difficult and unpredictable the capacitive sensor is inside the dog.
+              It made me rethink doing two sensors, because they would directly affect each other since
+              they would be located fairly close to each other inside the dog. So, I decided to focus on one capacitive sensor:
+              the head sensor.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/dogAl.jpg" width=450></a></center>
+            <p>
+              Before the stuffed dog, I had used wires as the sensor. But now to get the sensor to detect pets on
+              the dog's head I used aluminum foil and used an alligator clip to connect the foil to the wire on the
+              breadboard. The aluminum was under the dog's fur and locked into place with the stuffing. Then I experimented
+              with different threshold values for the sensor in the code. This was difficult because the sensor values were
+              sometimes chaotic. The sensor was very finicky about where you touched and how much pressure you applied. The sensor
+              also sensed touch when you touched the alligator clip. So, I had to be strategic when I was testing it.
+              During one point, I was getting extremly high values for the sensor when I was not touching the dog's head.
+              The culprit was my computer; every time that I touched my computer the sensor value would increase drastically.
+              This was also where I realized that wrapping the LED strip around his neck like a collar wasn't going to work.
+              When the LED was around his neck, it interfered with the sensor. Basically, the sensor detected the collar, which
+              made it difficult to sense a pet on the head by a hand. So, I decided to stick the LED strip around his waist like a belt.
+            </p>
+            <p>
+              First, I found a threshold for the sensor when the arduino was hooked to my laptop (5V). If the sensor value was below the
+              threshold, the LED would be off. But if the sensor value was above the threshold, the LED would fade from dark to light.
+            </p>
+
+            <br>
+            <center><video width="400" controls>
+              <source src="Photos/Final/testDogSensor.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <p>
+              But then when I plugged in my arduino to the wall outlet (12V), the threshold that worked for the 5V
+              no longer worked. This was because my sensor was now reading different values. I had to find that
+              threshold again by testing the it.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/solder1.jpg" width=350></a></center>
+            <br>
+            <center><img src="Photos/Final/solder2.jpg" width=350></a></center>
+            <p>
+              After I found the new threshold, I needed to solder my circuit so it would fit inside my
+              stuffed dog. I did this in small steps as to not make any connection mistakes.
+              I first soldered my transistor circuit and then the capacitive sensor circuit. I
+              compared my connections to my breadboard frequently.
+            </p>
+
+            <br>
+            <center><video width="400" controls>
+              <source src="Photos/Final/almostDog.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <p>
+              When I was done soldering, it was time to test if I had done it correctly. Luckily I had made
+              strong soldering connections because my dog worked! At this point, my dog still had the
+              aluminum foil in his head, which was attached to the alligator clips attached to the capacitive sensor wire.
+              I knew I didn't want the alligator clips inside the dog as this would cause chaotic sensor values, but
+              I was worried that soldering the capacitive sensor wire straight to the aluminum wouldn't work very well.
+              So, I opted to just poke the capacitive sensor wire directly into the head of the stuffed dog. It makes
+              petting the dog's head sort of weird because you have to somehow touch part of the wire while petting.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/wirehead.jpg" width=350></a></center>
+            <p>
+              Now I carefully removed some of the fluff and placed the arduino into the dog's stomach. It was a
+              tight fit, but it worked!
+              Then I took away the aluminum foil and alligator clips, poked the wire through the head fur, and
+              loosely wrapped the LED strip around the waist to get a sense of how much LED strip I needed.
+              I also had to cut a hole in the backside of the dog so I could plug the wall outlet to the arduino.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/sewing.jpg" width=350></a></center>
+            <p>
+              Now it was time to assemble Rover, my interactive stuffed dog!
+              I got my handy sewing kit out and cut the right length of LED strip and ribbon that would
+              perfectly fit around Rover's waist. The LED has a sticky side that I stuck to the ribbon,
+              and then sewed the ribbon to the dog so it wouldn't fall off.
+            </p>
+
+            <br>
+            <center><img src="Photos/Final/finaldog.jpg" width=350></a></center>
+
+            <br>
+            <center><video width="600" controls>
+              <source src="Photos/Final/final_woot.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></center>
+            <p>
+              Finally, I tied another piece of ribbon into a bow on top of the LED strip to better hide it and
+              to add a cute touch. I aso safety pinned Rover closed; I did not sew him closed because I wanted
+              the option to easily get at the arduino. But, overall Rover is sturdy and I can take him anywhere and
+              have people pet him.
+            </p>
+
+
+
+
 
             <br>
             <h3><b>Hurdles</b></h3>
-            <p>Some difficulties I faced when designing and building my stuffed dog was...</p>
+            <p>Throughout this project I came across a few difficulties when I was designing and building Rover.</p>
+            <p>
+              My first hurdle was time. I had a lot of cute input/output ideas that I would have
+              loved to be able to implement, but I knew that I wanted to be able to fit my arduino inside my dog,
+              which meant that I needed to take the time to solder it. So, with the combination of a small time frame and learning to solder
+              I had to narrow down and choose one of my intput/output ideas. But after this project, I feel much more confident
+              in my ability to implement my other ideas!
+            </p>
+
+            <p>
+              My next hurdle was the capacitive sensor. It's one thing to test it with a wire that directly touches
+              something, but it becomes less reliable when inserting it under the stuffed animal's fur; Initially,
+              I tested with a folded piece of aluminum foil and attatched an alligator clip to the foil and wire. This
+              worked temporarily, but I still struggled with consistent sensor values. The dog's fur made it harder for the
+              sensor to be reliable. When it came to soldering I decided to just poke the wire through the fur rather than
+              trying to solder the wire to the foil, because the aluminum foil wasn't the best conductive material. Next time
+              I would have used copper foil and soldered the wire to that.
+            </p>
+
+            <p>
+              My last hurdle was soldering. This was my second time soldering, but my first time soldering circuits.
+              It took me a few trial and errors to get the hang of things, but I quickly learned that
+              I needed to put a good amount of solder on in order to create the hershey kiss shape.
+            </p>
+
+
 
             <br>
             <h3><b>Arduino Code</b></h3>
-            </br>
             <p>
+              I learned about how to code the capacitive sensor from
+              <a href="https://playground.arduino.cc/Main/CapacitiveSensor/">this
+              arduino library documentation.</a>
             </p>
+            <p>
+              The code starts with importing the library needed for capacitive sensing and setting
+              up constants for the pins and threshold levels, and creating a capacitive sensor object.
+              Then in the setup I begin serial communications in order for easy debugging and initalize
+              the transistor pin as output so I can analogWrite to it later. The loop is where I read
+              the capacitor's value and check if it's below or above the threshold. If it's above the
+              threshold it means that the sensor is being touched. If it's below the threshold it means that
+              the sensor is not being touched. If it's touched, it goes into a for lopp that fades the LED
+              strip from dark to light; this is done with using analogWrite to write increasing values to the transistor pin,
+              which changes the duty cycle that affects the brightness of the LED. If the sensor is not touched, I analogWrite
+              0 to the transistor pin, turning the LED off. The loop constantly runs and checks the sensor's value.
+            </p>
+            <br>
 
+            <code><pre>
+              // Lia Johansen
+              // Final Project: Built-a-Dog
+              // Capacitive sensing & LED strip
+
+              // Import the capacitive sensor library
+              #include CapacitiveSensor.h
+
+              // Set up constants
+              // Send & receive pin for the dog's head
+              const int sendPin2 = 8; // send pin
+              const int receivePin2 = 7; // receive pin
+
+              // pin for the transistor connected to the LED Strip
+              const int transPin = 10;
+
+              // threshold value for the capacitive sensor
+              int threshhold = 2000;
+
+              // Creating capacitive sensor object
+              // Capacitive sensor for the dog's head
+              CapacitiveSensor capSensor2 = CapacitiveSensor(sendPin2,receivePin2);
+
+
+              void setup() {
+                // turn off autocalibrate on channel 1
+                capSensor2.set_CS_AutocaL_Millis(0xFFFFFFFF);
+
+                // Begin serial communciation for
+                // seeing sensor values on the serial monitor
+                Serial.begin(9600);
+
+                // initialize transistor pin as output
+                pinMode(transPin, OUTPUT);
+              }
+
+              void loop() {
+                // Get the capSensor2's value
+                long total2 =  capSensor2.capacitiveSensor(30);
+
+                // Print the capacitor sensor's value
+                // in order to debug
+                Serial.println(total2);
+
+                // If the head sensor is touched
+                if (total2 > threshhold) {
+                  for (int i = 0; i < 256; i += 5) {
+                    // make LED strip certain value (i)
+                    analogWrite(transPin, i);
+                    // Wait .02 seconds in order to actually see change
+                    delay(20);
+                  }
+                } else { // no sensor touch
+                  // turn the LED strip off
+                  digitalWrite(transPin, LOW);
+                }
+
+                // Wait.1 before looping again
+                delay(500);
+              }
+            </code></pre>
 
           </div>
 
